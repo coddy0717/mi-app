@@ -1,0 +1,102 @@
+/* Style.css */
+
+@import url("https://fonts.googleapis.com/css?family=Montserrat:700");
+
+.hero {
+  background-color: #0040c1;
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Montserrat", sans-serif;
+}
+
+.hero__title {
+  color: #fff;
+  position: relative;
+  top: 10%;
+  left: 10%;
+  transform: translate(-50%, -50%);
+  font-size: 50px;
+  z-index: 1;
+}
+
+.cube {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border: solid 1px #003298;
+  transform-origin: top right;
+  transform: scale(0) rotate(0deg) translate(-50%, -50%);
+  animation: cube 12s ease-in forwards infinite;
+}
+
+.cube:nth-child(1) {
+  animation-delay: 0s;
+  left: 6vw;
+  top: 60vh;
+}
+.cube:nth-child(2) {
+  animation-delay: 8s;
+  left: 6vw;
+  top: 20vh;
+}
+.cube:nth-child(3) {
+  animation-delay: 0s;
+  left: 6vw;
+  top: 25vh;
+}
+.cube:nth-child(4) {
+  animation-delay: 2s;
+  border: solid 1px #ffa500;
+  left: 6vw;
+  top: 40vh;
+}
+.cube:nth-child(5) {
+  animation-delay: 2s;
+  right: 6vw;
+  top: 60vh;
+}
+.cube:nth-child(6) {
+  animation-delay: 2s;
+  border: solid 1px #ffa500;
+  right: 6vw;
+  top: 40vh;
+}
+.cube:nth-child(7) {
+  animation-delay: 2s;
+  border: solid 1px #ffa500;
+  right: 10vw;
+  top: 35vh;
+}
+
+.cube:nth-child(8) {
+  animation-delay: 2s;
+  border: solid 1px #ffa500;
+  right: 6vw;
+  top: 60vh;
+}
+.cube:nth-child(9) {
+  animation-delay: 4s;
+  border: solid 1px #ffa500;
+  right: 10vw;
+  top: 30vh;
+}
+
+.cube:nth-child(10) {
+  animation-delay: 6s;
+  border: solid 1px #ffa500;
+  right: 10vw;
+  top: 80vh;
+}
+
+@keyframes cube {
+  from {
+    transform: scale(0) rotate(0deg) translate(-50%, -50%);
+    opacity: 1;
+  }
+  to {
+    transform: scale(20) rotate(960deg) translate(-50%, -50%);
+    opacity: 0;
+  }
+}
+

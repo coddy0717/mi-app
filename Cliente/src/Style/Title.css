@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:700");
+
+body {
+  font-family: "Roboto";
+  background-color: rgb(243, 244, 246);
+}
+
+p {
+  text-shadow: 0 0 7px rgba(255, 255, 255, 0.3),
+    0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.container {
+  color: #000000;
+  font-size: 2rem; /* Reduced font size */
+  text-transform: uppercase;
+  height: 30vh; /* Reduced height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.animation {
+  height: 2.5rem; /* Reduced height */
+  overflow: hidden;
+  margin-left: 0.5rem; /* Adjusted margin */
+  justify-content: flex-start;
+}
+
+.animation > div > div {
+  padding: 0.25rem 0.5rem; /* Adjusted padding */
+  height: 2rem; /* Adjusted height */
+  margin-bottom: 2rem; /* Adjusted margin */
+  display: inline-block;
+}
+
+.animation div:first-child {
+  animation: textAnimation 8s infinite;
+}
+
+.first div {
+  background-color: #20a7d8;
+}
+.second div {
+  background-color: #cd921e;
+}
+.third div {
+  background-color: #c10528;
+}
+
+@keyframes textAnimation {
+  0%,
+  10% {
+    margin-top: 0;
+  }
+  20%,
+  30% {
+    margin-top: -4rem; /* Adjusted animation values */
+  }
+  40%,
+  60% {
+    margin-top: -8rem; /* Adjusted animation values */
+  }
+  70%,
+  80% {
+    margin-top: -4rem; /* Adjusted animation values */
+  }
+  90%,
+  100% {
+    margin-top: 0;
+  }
+}
