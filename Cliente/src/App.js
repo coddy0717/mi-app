@@ -1,24 +1,19 @@
-import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Header from "./Components/Header";
-import Login from "./Components/Login";
-import Register from "./Components/Register";
-import Title from "./Components/Title";
+import React from "react";
+import Routers from "./Routers/Routers";
 
+/**
+ * La componente principal de la aplicación.
+ * @returns {React.FC} Una función de componente funcional de React.
+ */
 const App = () => {
+  /**
+   * El método de renderizado de la componente App.
+   * @returns {JSX.Element} Un elemento JSX que representa la componente App.
+   */
   return (
     <div>
-      <Router>
-        <div>
-          <Header />
-          <Title />
-          
-          <Routes>
-            <Route path="/Login" element={<Login />} />
-            <Route path="/Register" element={<Register />} />
-          </Routes>
-        </div>
-      </Router>
+      {/* El componente Routers se renderiza dentro de la componente App */}
+      <Routers />
     </div>
   );
 };

@@ -1,26 +1,56 @@
-const cors = require("cors");
-const express = require("express");
-const RegisterRoute = require("./Conections/ConecRegister");
-const LoginRoute = require("./Conections/ConecLogin");
+const cors = require("cors"); // Importa el módulo CORS para permitir peticiones entre dominios
+const express = require("express"); // Importa el módulo Express para crear la aplicación web
+const session = require("express-session"); // Importa el módulo express-session para manejar sesiones de usuario
+const bodyParser = require("body-parser"); // Importa el módulo body-parser para parsear los cuerpos de las solicitudes HTTP
 
-const app = express();
-const port = 5000;
-app.use(cors());
-app.use(express.json());
-app.use("/api", RegisterRoute);
-app.use("/api", LoginRoute);
+// Importa los archivos de rutas para diferentes funcionalidades
+const LoginRoute = require("./Conections/Autentification-Register/ConecLogin");
+const RegisterRoute = require("./Conections/Autentification-Register/ConecRegister");
+const LogoutRoute = require("./Conections/Logout/Logout");
+const ProfileRoute = require("./Conections/User/ProfileUser");
+const CursesUploadRoute = require("./Conections/Controllers/Uploadcurse");
+const InfoCursesRoute = require("./Conections/User/CardCursesUser");
+const DeleteCursoRoute = require("./Conections/Controllers/DeleteCursesUser");
+// const CursesTopicsRoute = require("./Conections/Controllers/CursesTopics"); // Ruta de controlador de temas de cursos (comentada)
 
-/**
- * @description Función asíncrona para manejar las solicitudes de registro de usuarios.
- * @param {import('express').Request} req Objeto de solicitud de Express.
- * @param {import('express').Response} res Objeto de respuesta de Express.
- * @returns {Promise<void>} Se resuelve cuando se procesa la solicitud.
- */
+const app = express(); // Crea una aplicación Express
+const port = 5000; // Puerto en el que se ejecutará el servidor
 
-/**
- * @description Inicia el servidor y escucha conexiones entrantes.
- * @returns {void}
- */
+// Configuración de CORS para permitir solicitudes desde el frontend en localhost:3000
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true, // Permite el envío de cookies de sesión a través de las solicitudes CORS
+  })
+);
+
+app.use(express.json()); // Middleware para parsear JSON en las solicitudes HTTP
+
+// Configuración de express-session para manejar sesiones de usuario
+app.use(
+  session({
+    secret: "KAJAJW", // Clave secreta para firmar la cookie de sesión (cámbiala por una más segura en producción)
+    resave: false, // No vuelva a guardar la sesión si no hay cambios
+    saveUninitialized: false, // No guarde sesiones no inicializadas automáticamente
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // Duración máxima de la cookie de sesión (1 día en milisegundos)
+    },
+  })
+);
+
+app.use(bodyParser.json()); // Middleware para parsear el cuerpo de las solicitudes HTTP como JSON
+
+// Asignación de rutas para diferentes funcionalidades
+app.use("/api", RegisterRoute); // Ruta para registro de usuarios
+app.use("/api", LoginRoute); // Ruta para inicio de sesión de usuarios
+app.use("/api", LogoutRoute); // Ruta para cerrar sesión de usuarios
+app.use("/api", ProfileRoute); // Ruta para obtener el perfil de usuario
+app.use("/api", CursesUploadRoute); // Ruta para subir información de cursos
+app.use("/api", InfoCursesRoute); // Ruta para obtener información de cursos de usuario
+app.use("/api", DeleteCursoRoute); // Ruta para eliminar cursos de usuario
+// app.use("/api", CursesTopicsRoute); // Ruta para manejar temas de cursos (comentada)
+
+// Inicia el servidor Express y lo hace escuchar en el puerto especificado
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
 });

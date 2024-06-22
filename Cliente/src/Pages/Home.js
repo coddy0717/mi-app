@@ -1,12 +1,11 @@
 import React from "react";
-
+import HeadersHome from "../Components/common/HeadersHome";
 
 const Home = () => {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-4xl">ECUNEMI</h1>
-      
-
+    <div>
+      {/* Otros componentes y lógica de la aplicación */}
+      <HeadersHome />
     </div>
   );
 };
