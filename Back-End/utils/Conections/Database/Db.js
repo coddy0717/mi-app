@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
   host: "localhost", // Nombre del host donde se encuentra la base de datos
   user: "root", // Nombre de usuario para conectarse a la base de datos
   password: "Coddyas2720", // Contraseña del usuario para la conexión
-  database: "cursos", // Nombre de la base de datos a la que se desea conectar
+  database: "Curso", // Nombre de la base de datos a la que se desea conectar
 });
 
 // Intenta conectar con la base de datos utilizando la configuración proporcionada

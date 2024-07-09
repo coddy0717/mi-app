@@ -6,7 +6,7 @@ const JWT_SECRET = "Co"; // Clave secreta utilizada para firmar y verificar los 
 const verifyToken = (req, res, next) => {
   // Obtiene el token de autorización del encabezado de la solicitud
   let token = req.headers["authorization"];
-  console.log("Token recibido:", token); // Imprime el token recibido en la consola para fines de depuración
+  //console.log("Token recibido:", token); // Imprime el token recibido en la consola para fines de depuración
 
   // Divide el token en sus partes (Bearer y el token en sí)
   let parts = token.split(" ");

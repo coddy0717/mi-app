@@ -11,8 +11,14 @@ const ProfileRoute = require("./Conections/User/ProfileUser");
 const CursesUploadRoute = require("./Conections/Controllers/Uploadcurse");
 const InfoCursesRoute = require("./Conections/User/CardCursesUser");
 const DeleteCursoRoute = require("./Conections/Controllers/DeleteCursesUser");
-// const CursesTopicsRoute = require("./Conections/Controllers/CursesTopics"); // Ruta de controlador de temas de cursos (comentada)
-
+const ContentCursesRoute = require("./Conections/Controllers/CursesContent");
+const InscripcionRoute = require("./Conections/Controllers/Inscripcion");
+const CursesAllRoute = require("./Conections/Controllers/AllCurses");
+const CourseDetailsRoute = require("./Conections/Controllers/CourseDetails");
+const InscripCoursecionRoute = require("./Conections/Controllers/CursosIns");
+const CursesContentRoute = require("./Conections/Controllers/CursesContent");
+const certicatesRoute = require("./Conections/Controllers/certificates");
+const dashboardRoute = require("./Conections/Controllers/dashboard");
 const app = express(); // Crea una aplicación Express
 const port = 5000; // Puerto en el que se ejecutará el servidor
 
@@ -29,7 +35,7 @@ app.use(express.json()); // Middleware para parsear JSON en las solicitudes HTTP
 // Configuración de express-session para manejar sesiones de usuario
 app.use(
   session({
-    secret: "KAJAJW", // Clave secreta para firmar la cookie de sesión (cámbiala por una más segura en producción)
+    secret: "KAJAJW", // Clave secreta para firmar la cookie de sesión
     resave: false, // No vuelva a guardar la sesión si no hay cambios
     saveUninitialized: false, // No guarde sesiones no inicializadas automáticamente
     cookie: {
@@ -48,8 +54,14 @@ app.use("/api", ProfileRoute); // Ruta para obtener el perfil de usuario
 app.use("/api", CursesUploadRoute); // Ruta para subir información de cursos
 app.use("/api", InfoCursesRoute); // Ruta para obtener información de cursos de usuario
 app.use("/api", DeleteCursoRoute); // Ruta para eliminar cursos de usuario
-// app.use("/api", CursesTopicsRoute); // Ruta para manejar temas de cursos (comentada)
-
+app.use("/api", ContentCursesRoute);
+app.use("/api", CursesAllRoute);
+app.use("/api", CourseDetailsRoute);
+app.use("/api", InscripcionRoute);
+app.use("/api", InscripCoursecionRoute);
+app.use("/api", CursesContentRoute);
+app.use("/api", certicatesRoute);
+app.use("/api", dashboardRoute);
 // Inicia el servidor Express y lo hace escuchar en el puerto especificado
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);

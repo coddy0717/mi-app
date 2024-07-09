@@ -1,11 +1,14 @@
 import React from "react";
-import HeadersHome from "../Components/common/HeadersHome";
+import AllCurses from "../Components/common/AllCurses";
 
 const Home = () => {
   return (
     <div>
       {/* Otros componentes y lógica de la aplicación */}
-      <HeadersHome />
+
+      
+      <AllCurses />
+
     </div>
   );
 };

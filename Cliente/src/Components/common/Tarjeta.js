@@ -32,9 +32,9 @@ const Tarjeta = ({
   facultad,
   asignatura,
   Duracion_Curso,
-  cursoId,
   setCursos,
   setSuccessMessage,
+  cursoId, // Asegurar que cursoId se recibe correctamente
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la visibilidad del modal
   const navigate = useNavigate(); // Hook de react-router para navegar entre rutas
@@ -79,8 +79,8 @@ const Tarjeta = ({
   /**
    * Función para navegar a la página de edición del curso.
    */
-  const CurseEdit = () => {
-    navigate(`/CursesComplete/${cursoId}`); // Navega a la página de edición con el ID del curso
+  const EditCurso = () => {
+    navigate(`/EditCurse/${cursoId}`);
   };
 
   return (
@@ -128,10 +128,11 @@ const Tarjeta = ({
           >
             Borrar Curso
           </button>
+
           <button
             type="button"
             className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 mx-2 mb-2 dark:focus:ring-yellow-900"
-            onClick={CurseEdit}
+            onClick={EditCurso}
           >
             Editar Curso
           </button>

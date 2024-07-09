@@ -13,9 +13,13 @@ import PrivateRouters from "../Routers/PrivateRouters";
 import UploadCourse from "../Components/User/UploadCourse";
 import CursesUserCreate from "../Pages/CursesUserCreate";
 import Tarjeta from "../Components/common/Tarjeta";
-import ContentCurses from "../Components/common/ContentCurses";
-import CursesCompleteEdit from "../Pages/CursesCompleteEdit";
-
+import AllCurses from "../Components/common/AllCurses";
+import TarjetaAll from "../Components/common/TarjetaAll";
+import CursosInscriptos from "../Components/common/CursosInscriptos";
+import ViewCourse from "../Components/common/Vercurso";
+import CurseEdit from "../Pages/CurseEdit";
+import EditCurse from "../Components/common/EditCurse";
+import Dashboard from "../Pages/Dashboard";
 /**
  * El componente principal de enrutamiento de la aplicación.
  * @returns {React.FC} Una función de componente funcional de React.
@@ -60,6 +64,15 @@ const Routers = () => {
                 </PrivateRouters>
               }
             />
+            {/* La ruta /Home renderiza el componente Home y está protegida por PrivateRouters. */}
+            <Route
+              path="/AllCurses"
+              element={
+                <PrivateRouters>
+                  <AllCurses />
+                </PrivateRouters>
+              }
+            />
 
             {/* La ruta /UploadCourse renderiza el componente UploadCourse. */}
             <Route path="/UploadCourse" element={<UploadCourse />} />
@@ -68,16 +81,16 @@ const Routers = () => {
             <Route path="/CursesUserCreate" element={<CursesUserCreate />} />
 
             {/* La ruta /Tarjeta renderiza el componente Tarjeta. */}
-            <Route path="/Tarjeta" element={<Tarjeta />} />
-
-            {/* La ruta /ContentCurses renderiza el componente ContentCurses. */}
-            <Route path="/ContentCurses" element={<ContentCurses />} />
-
-            {/* La ruta /CursesCompleteEdit renderiza el componente CursesCompleteEdit. */}
-            <Route
-              path="/CursesCompleteEdit"
-              element={<CursesCompleteEdit />}
-            />
+            <Route path="/Tarjeta/:cursoId" element={<Tarjeta />} />
+            <Route path="/TarjetaAll" element={<TarjetaAll />} />
+            <Route path="/CursosInscriptos" element={<CursosInscriptos />} />
+            <Route path="/ViewCourse/:id" element={<ViewCourse />} />
+            {/* La ruta /CurseEdit renderiza el componente CurseEdit. */}
+            <Route path="/CurseEdit" element={<CurseEdit />} />
+            {/* La ruta /EditCurse renderiza el componente EditCurse. */}
+            <Route path="/EditCurse/:cursoId" element={<EditCurse />} />
+            {/* La ruta /Dashboard renderiza el componente Dashboard. */}
+            <Route path="/Dashboard" element={<Dashboard />} />
           </Routes>
         </div>
       </Router>
