@@ -10,6 +10,12 @@ const MyProfile = () => {
   const [profilePicUrl, setProfilePicUrl] = useState(""); // Estado para la URL de la foto de perfil del usuario
   const [cursos, setCursos] = useState([]); // Estado para almacenar la lista de cursos creados por el usuario
   const [error, setError] = useState(""); // Estado para manejar errores
+  const [isEditing, setIsEditing] = useState(false); // Estado para manejar el modo de edición
+  const [formData, setFormData] = useState({
+    Nombres: "",
+    Apellidos: "",
+    Direccion: "",
+  });
 
   /**
    * Efecto secundario para obtener los datos del perfil del usuario y los cursos creados por él.
@@ -66,7 +72,7 @@ const MyProfile = () => {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError("No se pudieron cargar los datos del perfil y los cursos.");
+        setError("No existen cursos creados por ti.");
       }
     };
 
@@ -84,7 +90,47 @@ const MyProfile = () => {
     day: "2-digit",
   });
 
-  // Renderiza el componente MyProfile con la estructura de la interfaz de usuario
+  // Manejador de cambio para el formulario de edición
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  // Manejador de envío del formulario de edición
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(
+        "http://localhost:5000/api/profile",
+        {
+          ...formData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      // Actualizar los datos del perfil tras la edición
+      const updatedUserProfileResponse = await axios.get(
+        "http://localhost:5000/api/profile",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setUser(updatedUserProfileResponse.data);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error updating profile data:", error);
+      setError("No existen cursos creados por ti.");
+    }
+  };
+
   return (
     <div className="relative">
       <header className="z-50">
@@ -102,7 +148,8 @@ const MyProfile = () => {
             <div className="ml-6">
               {/* Muestra el nombre completo y el rol del usuario */}
               <h2 className="text-4xl font-semibold text-gray-800">
-                {user.Nombres} {user.Apellidos}
+                {user.Nombres.toLocaleUpperCase()}{" "}
+                {user.Apellidos.toLocaleUpperCase()}
               </h2>
               <p className="text-gray-600 text-xl">
                 {user.Nombre_Roll.toUpperCase()}
@@ -115,30 +162,99 @@ const MyProfile = () => {
               <h3 className="text-2xl font-semibold text-gray-800 mb-4">
                 Información Personal
               </h3>
-              <div className="mb-4">
-                <span className="text-gray-600 block">Correo Electrónico:</span>
-                <span className="text-gray-800">{user.Correo_Electronico}</span>
-              </div>
-              <div className="mb-4">
-                <span className="text-gray-600 block">
-                  Fecha de Nacimiento:
-                </span>
-                <span className="text-gray-800">{fechaFormateada}</span>
-              </div>
-              <div className="mb-4">
-                <span className="text-gray-600 block">Género:</span>
-                <span className="text-gray-800">
-                  {user.genero.toUpperCase()}
-                </span>
-              </div>
-              <div className="mb-4">
-                <span className="text-gray-600 block">Dirección:</span>
-                <span className="text-gray-800">{user.Direccion}</span>
-              </div>
-              <div className="mb-4">
-                <span className="text-gray-600 block">Nombre de Usuario:</span>
-                <span className="text-gray-800">{user.Nombre_Usuario}</span>
-              </div>
+              {isEditing ? (
+                <form onSubmit={handleFormSubmit}>
+                  <div className="mb-4">
+                    <label className="text-gray-600 block">Nombres:</label>
+                    <input
+                      type="text"
+                      name="Nombres"
+                      value={formData.Nombres}
+                      onChange={handleInputChange}
+                      className="text-gray-800 border border-gray-300 p-2 rounded w-full"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="text-gray-600 block">Apellidos</label>
+                    <input
+                      type="text"
+                      name="Apellidos"
+                      value={formData.Apellidos}
+                      onChange={handleInputChange}
+                      className="text-gray-800 border border-gray-300 p-2 rounded w-full"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="text-gray-600 block">Dirección:</label>
+                    <input
+                      type="text"
+                      name="Direccion"
+                      value={formData.Direccion}
+                      onChange={handleInputChange}
+                      className="text-gray-800 border border-gray-300 p-2 rounded w-full"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                  >
+                    Guardar Cambios
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(false)}
+                    className="bg-red-500 text-white px-4 py-2 rounded ml-4"
+                  >
+                    Cancelar
+                  </button>
+                </form>
+              ) : (
+                <>
+                  <div className="mb-4">
+                    <span className="text-gray-600 block">
+                      Correo Electrónico:
+                    </span>
+                    <span className="text-gray-800">
+                      {user.Correo_Electronico}
+                    </span>
+                  </div>
+                  <div className="mb-4">
+                    <span className="text-gray-600 block">
+                      Fecha de Nacimiento:
+                    </span>
+                    <span className="text-gray-800">{fechaFormateada}</span>
+                  </div>
+                  <div className="mb-4">
+                    <span className="text-gray-600 block">Género:</span>
+                    <span className="text-gray-800">
+                      {user.genero.toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="mb-4">
+                    <span className="text-gray-600 block">Dirección:</span>
+                    <span className="text-gray-800">{user.Direccion}</span>
+                  </div>
+                  <div className="mb-4">
+                    <span className="text-gray-600 block">
+                      Nombre de Usuario:
+                    </span>
+                    <span className="text-gray-800">{user.Nombre_Usuario}</span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setFormData({
+                        Nombres: user.Nombres,
+                        Apellidos: user.Apellidos,
+                        Direccion: user.Direccion,
+                      });
+                      setIsEditing(true);
+                    }}
+                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                  >
+                    Editar Perfil
+                  </button>
+                </>
+              )}
             </div>
             {/* Cursos creados por el usuario */}
             <div>
@@ -152,13 +268,13 @@ const MyProfile = () => {
               {error ? (
                 <span className="text-red-500">{error}</span>
               ) : (
-                <ul>
+                <div>
                   {cursos.map((curso) => (
-                    <li key={curso.id} className="text-gray-800">
-                      <span>✏️ {curso.Nombre_Curso}</span>
-                    </li>
+                    <ul key={curso.id} className="text-gray-800">
+                      <li>✏️ {curso.Nombre_Curso}</li>
+                    </ul>
                   ))}
-                </ul>
+                </div>
               )}
             </div>
           </div>

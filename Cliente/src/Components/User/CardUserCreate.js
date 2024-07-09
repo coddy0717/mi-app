@@ -42,7 +42,7 @@ const Cursos = () => {
         }
       } catch (error) {
         console.error("Error al obtener cursos:", error);
-        setError("Error al obtener cursos. Inténtelo de nuevo más tarde.");
+        setError("No has creado Cursos");
       }
     };
 
@@ -92,10 +92,8 @@ const Cursos = () => {
         </h1>
         {/* Componente de Notificación para informar sobre los cursos creados */}
         <Notification
-          texto="Aquí se encuentran los cursos creados que aún no están
-                publicados. La parte visual está configurada, pero falta el
-                contenido educativo. Si deseas publicar tus cursos, haz clic en
-                Editar Curso. Para eliminarlo, haz clic en Borrar Curso"
+          texto="Aquí se encuentran los cursos creados y se han publicados 
+          si quieres borrarlo, haz clic en Borrar Curso"
         />
         {/* Manejo de errores y mensajes de éxito */}
         {error && (

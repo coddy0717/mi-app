@@ -31,7 +31,6 @@ const Login = () => {
             logged: true,
           },
         });
-        console.log(response.data.user); // Log the user's name if it's available in the response
       }
     } catch (error) {
       // Manejar errores de respuesta de la solicitud

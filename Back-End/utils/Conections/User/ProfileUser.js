@@ -25,7 +25,8 @@ router.get("/profile", verifyToken, (req, res) => {
       r.Nombre_Roll
     FROM usuario u
     JOIN rol r ON u.ID_Roll = r.Id_Roll
-    WHERE u.Id_Usuario = ?`;
+    WHERE u.Id_Usuario = ?;
+  `;
 
   db.query(q, [userId], (err, data) => {
     if (err) {
@@ -66,6 +67,33 @@ router.get("/profile-pic", verifyToken, (req, res) => {
       "Content-Length": fotoPerfil.length,
     });
     res.end(fotoPerfil); // Enviamos la imagen binaria como respuesta
+  });
+});
+
+/**
+ * @description Ruta para actualizar los datos del usuario logueado.
+ */
+router.put("/profile", verifyToken, (req, res) => {
+  const userId = req.userId;
+  const { Nombres, Apellidos, Direccion } = req.body;
+
+  const q = `
+    UPDATE usuario
+    SET Nombres = ?, Apellidos = ?, Direccion = ?
+    WHERE Id_Usuario = ?;
+  `;
+
+  db.query(q, [Nombres, Apellidos, Direccion, userId], (err, result) => {
+    if (err) {
+      console.error("Error al actualizar los datos del usuario:", err);
+      return res.status(500).json(err);
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    return res.json({ message: "Datos actualizados correctamente" });
   });
 });
 
