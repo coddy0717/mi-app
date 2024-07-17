@@ -20,6 +20,7 @@ import ViewCourse from "../Components/common/Vercurso";
 import CurseEdit from "../Pages/CurseEdit";
 import EditCurse from "../Components/common/EditCurse";
 import Dashboard from "../Pages/Dashboard";
+
 /**
  * El componente principal de enrutamiento de la aplicación.
  * @returns {React.FC} Una función de componente funcional de React.
@@ -91,6 +92,7 @@ const Routers = () => {
             <Route path="/EditCurse/:cursoId" element={<EditCurse />} />
             {/* La ruta /Dashboard renderiza el componente Dashboard. */}
             <Route path="/Dashboard" element={<Dashboard />} />
+            
           </Routes>
         </div>
       </Router>

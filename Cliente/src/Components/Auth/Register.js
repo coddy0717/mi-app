@@ -38,17 +38,32 @@ const Register = () => {
   // Validación del correo electrónico y contraseña
   useEffect(() => {
     const errors = [];
+
+    // Validación del correo electrónico
     setEmailError(
       email.endsWith("@unemi.edu.ec")
         ? ""
         : "El correo debe terminar con @unemi.edu.ec."
     );
-    setPasswordError(
-      password === confirmPassword ? "" : "Las contraseñas no coinciden."
-    );
-    if (!email.endsWith("@unemi.edu.ec")) errors.push("correo");
-    if (password !== confirmPassword) errors.push("contraseña");
-    setIsFormValid(errors.length === 0);
+
+    // Validación de la contraseña
+    if (password !== confirmPassword) {
+      errors.push("Las contraseñas no coinciden.");
+    }
+
+    if (password.length < 6) {
+      errors.push("La contraseña debe tener al menos 6 caracteres.");
+    }
+
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      errors.push("La contraseña debe contener al menos un caracter especial.");
+    }
+
+    // Actualización del estado de errores de contraseña
+    setPasswordError(errors.join(", "));
+
+    // Determinar si el formulario es válido
+    setIsFormValid(errors.length === 0 && email.endsWith("@unemi.edu.ec"));
   }, [email, password, confirmPassword]);
 
   // Manejar el envío del formulario

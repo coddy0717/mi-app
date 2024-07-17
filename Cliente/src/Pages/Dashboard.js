@@ -89,7 +89,7 @@ const Dashboard = () => {
           Dashboard de Inscripciones y Distribución por Género
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Gráfico de Barras (Inscripciones por Curso) */}
+          {/* Gráfico de Barras Horizontales (Inscripciones por Curso) */}
           <div className="bg-white p-4 rounded shadow-md">
             <h2 className="text-xl font-bold mb-4 text-center">
               Inscripciones por Curso
@@ -97,16 +97,17 @@ const Dashboard = () => {
             <ResponsiveContainer width="100%" height={500}>
               <BarChart
                 data={enrollmentData}
+                layout="vertical"
                 margin={{
                   top: 5,
                   right: 30,
-                  left: 20,
+                  left: 50,
                   bottom: 5,
                 }}
               >
-                <CartesianGrid strokeDasharray="10 10" />
-                <XAxis dataKey="Nombre_Curso" />
-                <YAxis />
+                <CartesianGrid strokeDasharray="20 20" />
+                <XAxis type="number" />
+                <YAxis type="category" dataKey="Nombre_Curso" />
                 <Tooltip />
                 <Legend />
                 <Bar
@@ -128,26 +129,30 @@ const Dashboard = () => {
             </ResponsiveContainer>
           </div>
 
-          {/* Gráfico de Pastel (Distribución por Género) */}
-          <div className="bg-white p-4 rounded shadow-md">
+         {/* Gráfico de Barras (Distribución por Género) */}
+         <div className="bg-white p-3 rounded shadow-md">
             <h2 className="text-xl font-bold mb-4 text-center">
               Distribución por Género
             </h2>
             {selectedCurso && (
-              <PieChart width={400} height={400}>
-                <Pie
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart
                   data={genderData}
-                  dataKey="count"
-                  nameKey="gender"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  fill="#82ca9d"
-                  label
-                />
-                <Tooltip />
-                <Legend />
-              </PieChart>
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="gender"  />
+                  <YAxis tickCount={5} />
+                  <Tooltip fill="#853400"/>
+                  <Legend />
+                  <Bar dataKey="count" name="Cantidad" fill="#853400" />
+                </BarChart>
+              </ResponsiveContainer>
             )}
           </div>
 

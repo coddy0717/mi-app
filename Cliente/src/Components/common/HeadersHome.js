@@ -49,7 +49,9 @@ const HeadersHome = ({ courseNames, facultyNames, setSearch, setFaculty }) => {
   const handleLogout = async () => {
     try {
       await axios.post("http://localhost:5000/api/Logout");
-      navigate("/Login");
+      localStorage.removeItem("token"); // Elimina el token JWT almacenado
+      localStorage.removeItem("user"); // Elimina cualquier otro dato del usuario almacenado localmente si es necesario
+      navigate("/Login"); // Redirige al usuario a la página de inicio de sesión
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
     }
@@ -149,7 +151,7 @@ const HeadersHome = ({ courseNames, facultyNames, setSearch, setFaculty }) => {
           📤 Subir Curso
         </button>
       </div>
-      <div className="relative mt-4 sm:mt-0 sm:ml-4">
+      <div className="relative mt-4 sm:mt-0 sm:ml-4 z-50">
         <button onClick={toggleProfileMenu}>
           <img
             src={profilePicUrl}

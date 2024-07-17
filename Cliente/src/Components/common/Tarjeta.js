@@ -2,25 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-/**
- * Componente funcional para mostrar una tarjeta de curso con opciones de eliminar y editar.
- * Utiliza un modal para confirmar la eliminación del curso.
- *
- * @param {Object} props - Propiedades del componente.
- * @param {string} props.imagen - URL de la imagen del curso.
- * @param {string} props.titulo - Título del curso.
- * @param {string} props.descripcion - Descripción del curso.
- * @param {string} props.fechaCreacion - Fecha de creación del curso.
- * @param {string} props.autor - Nombre del autor del curso.
- * @param {string} props.imagenAutor - URL de la imagen del autor del curso.
- * @param {string} props.carrera - Nombre de la carrera del curso.
- * @param {string} props.facultad - Nombre de la facultad del curso.
- * @param {string} props.asignatura - Nombre de la asignatura del curso.
- * @param {string} props.Duracion_Curso - Duración del curso.
- * @param {number} props.cursoId - ID único del curso.
- * @param {function} props.setCursos - Función para actualizar la lista de cursos después de eliminar uno.
- * @param {function} props.setSuccessMessage - Función para establecer un mensaje de éxito.
- */
 const Tarjeta = ({
   imagen,
   titulo,
@@ -34,22 +15,15 @@ const Tarjeta = ({
   Duracion_Curso,
   setCursos,
   setSuccessMessage,
-  cursoId, // Asegurar que cursoId se recibe correctamente
+  cursoId,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la visibilidad del modal
-  const navigate = useNavigate(); // Hook de react-router para navegar entre rutas
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
-  /**
-   * Función para alternar la visibilidad del modal.
-   */
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  /**
-   * Función para eliminar el curso haciendo una solicitud DELETE al servidor.
-   * Actualiza la lista de cursos y muestra un mensaje de éxito.
-   */
   const deleteCurso = async () => {
     try {
       await axios.delete(`http://localhost:5000/api/DeleteCurso/${cursoId}`, {
@@ -58,27 +32,21 @@ const Tarjeta = ({
         },
       });
 
-      // Actualiza la lista de cursos eliminando el curso actual
       setCursos((prevCursos) =>
         prevCursos.filter((curso) => curso.Id_Curso !== cursoId)
       );
 
-      // Muestra un mensaje de éxito temporal
       setSuccessMessage("Curso eliminado exitosamente");
       setTimeout(() => {
         setSuccessMessage("");
-      }, 3000); // Oculta el mensaje de éxito después de 3 segundos
+      }, 3000);
     } catch (error) {
       console.error("Error al eliminar el curso:", error);
-      // Aquí podrías manejar el error mostrando un mensaje al usuario si es necesario
     }
 
-    toggleModal(); // Cierra el modal después de eliminar el curso
+    toggleModal();
   };
 
-  /**
-   * Función para navegar a la página de edición del curso.
-   */
   const EditCurso = () => {
     navigate(`/EditCurse/${cursoId}`);
   };
@@ -90,11 +58,9 @@ const Tarjeta = ({
         <div className="p-4">
           <h2 className="text-xl font-bold mb-2">{titulo}</h2>
           <p className="text-orange-700 mb-4">
-            Duración del Curso:{" "}
-            {Duracion_Curso.replace(/\b\w/g, (l) => l.toUpperCase())}
+            Duración del Curso: {Duracion_Curso.replace(/\b\w/g, (l) => l.toUpperCase())}
           </p>
           <p className="text-blue-700 mb-4">{descripcion}</p>
-
           <div className="flex items-center mb-4">
             <img
               className="w-10 h-10 object-cover rounded-full mr-4"
@@ -128,7 +94,6 @@ const Tarjeta = ({
           >
             Borrar Curso
           </button>
-
           <button
             type="button"
             className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 mx-2 mb-2 dark:focus:ring-yellow-900"
@@ -138,7 +103,6 @@ const Tarjeta = ({
           </button>
         </div>
       </div>
-
       {isModalOpen && (
         <div
           id="popup-modal"
@@ -190,14 +154,14 @@ const Tarjeta = ({
                 </h3>
                 <button
                   type="button"
-                  className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-900 dark:hover:bg-red-700 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+                  className="text-white bg-red-600 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2 dark:focus:ring-red-900"
                   onClick={deleteCurso}
                 >
-                  Sí, estoy seguro/a
+                  Sí, eliminar
                 </button>
                 <button
                   type="button"
-                  className="py-2.5 px-5 ml-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-gray-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-blue-700 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                  className="text-gray-500 bg-white hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
                   onClick={toggleModal}
                 >
                   No, cancelar

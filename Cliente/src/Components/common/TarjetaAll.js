@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const TarjetaAll = ({
   imagen,
@@ -15,9 +16,10 @@ const TarjetaAll = ({
   setSuccessMessage,
   Duracion_Curso,
   Numero_Inscritos,
-  cursoId, // Asegurar que cursoId se recibe correctamente
+  cursoId,
 }) => {
   const [yaInscrito, setYaInscrito] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const verificarInscripcion = async () => {
@@ -33,20 +35,15 @@ const TarjetaAll = ({
 
         if (response.data.inscrito) {
           setYaInscrito(true);
-          localStorage.setItem(`inscrito_${cursoId}`, "true"); // Almacena la inscripción en localStorage
+        } else {
+          setYaInscrito(false);
         }
       } catch (error) {
         console.error("Error al verificar la inscripción:", error);
       }
     };
 
-    // Verificar si hay datos de inscripción en localStorage
-    const inscrito = localStorage.getItem(`inscrito_${cursoId}`);
-    if (inscrito) {
-      setYaInscrito(true);
-    } else {
-      verificarInscripcion();
-    }
+    verificarInscripcion();
   }, [cursoId]);
 
   const handleInscripcion = async () => {
@@ -75,9 +72,8 @@ const TarjetaAll = ({
         setSuccessMessage("");
       }, 3000);
 
-      // Marcar como inscrito y almacenar en localStorage
+      // Marcar como inscrito y actualizar el estado
       setYaInscrito(true);
-      localStorage.setItem(`inscrito_${cursoId}`, "true");
     } catch (error) {
       console.error("Error en la inscripción:", error);
       setSuccessMessage("Error al inscribirse. Inténtelo de nuevo más tarde.");
@@ -88,8 +84,9 @@ const TarjetaAll = ({
   };
 
   const handleVerCurso = () => {
-    // Lógica para redirigir o mostrar el curso
-    console.log("Ver curso", cursoId);
+    navigate(`/ViewCourse/${cursoId}`, {
+      state: { curso: { Id_Curso: cursoId } },
+    });
   };
 
   return (
@@ -116,9 +113,6 @@ const TarjetaAll = ({
               </p>
               <p className="text-gray-600 text-sm">
                 Fecha de Creación: {fechaCreacion}
-              </p>
-              <p className="text-gray-600 text-sm">
-                Número de Inscriptos: {Numero_Inscritos}
               </p>
             </div>
           </div>

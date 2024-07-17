@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { FaFileDownload, FaCertificate } from "react-icons/fa";
+import { FaFileDownload, FaCertificate, FaClock } from "react-icons/fa";
 import Modal from "react-modal";
 import HeadersHome from "./HeadersHome";
 
@@ -72,16 +72,28 @@ const ViewCourse = () => {
         }
       );
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], { type: "application/pdf" })
+      );
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute("download", "certificate.pdf");
       document.body.appendChild(link);
       link.click();
+      link.parentNode.removeChild(link);
     } catch (error) {
       console.error("Error al generar el certificado:", error);
       alert("Error al generar el certificado. Inténtelo de nuevo más tarde.");
     }
+  };
+
+  const handleDownloadResource = (resource, resourceName) => {
+    const link = document.createElement("a");
+    link.href = `data:application/pdf;base64,${resource}`;
+    link.setAttribute("download", `${resourceName}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode.removeChild(link);
   };
 
   if (error) {
@@ -99,73 +111,100 @@ const ViewCourse = () => {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <HeadersHome />
-      <div className=" mx-auto py-8 px-4">
-        <h1 className="text-3xl font-bold text-center mb-8">
-          {curso.Nombre_Curso}
-        </h1>
-        <div className="flex flex-col md:flex-row">
-          <div className="w-full md:w-1/3 bg-white p-4 rounded shadow-md mb-6 md:mb-0">
-            <h2 className="text-xl font-bold mb-4">Contenido del curso</h2>
-            <div className="space-y-4">
+    <>
+      <div className="bg-gray-100 min-h-screen">
+        <HeadersHome className="mt-0" />
+
+        <div className="mx-auto py-8 px-4">
+          <h1 className="text-3xl font-bold text-center mb-8">
+            {curso.Nombre_Curso}
+          </h1>
+          <div className="flex flex-col md:flex-row">
+            <div className="w-full md:w-1/3 bg-white p-4 rounded shadow-md mb-6 md:mb-0">
+              <h2 className="text-xl font-bold mb-4">Contenido del curso</h2>
+              <div className="space-y-4">
+                {courseContent.map((content, index) => (
+                  <div key={index} className="flex items-center">
+                    <span className="text-lg font-semibold text-blue-600">
+                      {content.Nombre_Tema}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="w-full md:w-2/3 md:ml-8">
               {courseContent.map((content, index) => (
-                <div key={index} className="flex items-center">
-                  <span>{content.Nombre_Tema}</span>
+                <div
+                  key={index}
+                  className="bg-white p-6 rounded shadow-md mb-6"
+                >
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-bold text-blue-600">
+                      {content.Nombre_Tema}
+                    </h2>
+                  </div>
+                  <p className="mb-2">
+                    <strong className="text-gray-800">
+                      Duración del tema:
+                    </strong>{" "}
+                    <span className="text-gray-700 flex items-center">
+                      <FaClock className="mr-1" />
+                      {content.Duracion_Tema}
+                    </span>
+                  </p>
+                  <h3 className="text-lg font-semibold mb-2 text-gray-700">
+                    {content.Nombre_Clase}
+                  </h3>
+                  <div className="mb-4 relative aspect-w-16 aspect-h-9">
+                    <video
+                      controls
+                      className="w-full h-full rounded-lg"
+                      style={{ objectFit: "cover" }}
+                    >
+                      <source
+                        src={`data:video/mp4;base64,${content.Video}`}
+                        type="video/mp4"
+                      />
+                      Tu navegador no soporta la reproducción de video.
+                    </video>
+                  </div>
+                  <div className="mb-4">
+                    <h4 className="text-md font-semibold text-gray-800">
+                      Recursos:
+                    </h4>
+                    <p className="text-gray-700">
+                      <strong>Nombre:</strong> {content.Nombre_Recurso}
+                    </p>
+                    <p className="text-gray-700">
+                      <strong>Descripción:</strong>{" "}
+                      {content.Descripcion_Recurso}
+                    </p>
+                    <button
+                      onClick={() =>
+                        handleDownloadResource(
+                          content.Archivo_Recurso,
+                          content.Nombre_Recurso
+                        )
+                      }
+                      className="bg-blue-600 text-white px-4 py-2 rounded-full flex items-center mt-2"
+                    >
+                      <FaFileDownload className="mr-2" />
+                      Descargar recurso
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-          <div className="w-full md:w-2/3 md:ml-8">
-            {courseContent.map((content, index) => (
-              <div key={index} className="bg-white p-6 rounded shadow-md mb-6">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-bold">{content.Nombre_Tema}</h2>
-                </div>
-                <p className="mb-2">
-                  <strong>Duración del tema:</strong> {content.Duracion_Tema}
-                </p>
-                <h3 className="text-lg font-semibold mb-2">
-                  {content.Nombre_Clase}
-                </h3>
-                <div className="mb-4">
-                  <video controls className="w-full">
-                    <source
-                      src={`data:video/mp4;base64,${content.Video}`}
-                      type="video/mp4"
-                    />
-                    Tu navegador no soporta la reproducción de video.
-                  </video>
-                </div>
-                <div className="mb-4">
-                  <h4 className="text-md font-semibold">Recursos:</h4>
-                  <p>
-                    <strong>Nombre:</strong> {content.Nombre_Recurso}
-                  </p>
-                  <p>
-                    <strong>Descripción:</strong> {content.Descripcion_Recurso}
-                  </p>
-                  <a
-                    href={`data:application/octet-stream;base64,${content.Archivo_Recurso}`}
-                    download={content.Nombre_Recurso}
-                    className="text-blue-500 underline flex items-center"
-                  >
-                    <FaFileDownload className="mr-2" />
-                    Descargar recurso
-                  </a>
-                </div>
-              </div>
-            ))}
+          <div className="text-center mt-6">
+            <button
+              onClick={() => setModalIsOpen(true)}
+              className="bg-blue-600 text-white px-6 py-3 rounded shadow-md hover:bg-blue-700 flex items-center justify-center"
+            >
+              <FaCertificate className="mr-2" />
+              Generar certificado
+            </button>
           </div>
-        </div>
-        <div className="text-center mt-6">
-          <button
-            onClick={() => setModalIsOpen(true)}
-            className="bg-blue-600 text-white px-6 py-3 rounded shadow-md hover:bg-blue-700 flex items-center justify-center"
-          >
-            <FaCertificate className="mr-2" />
-            Generar certificado
-          </button>
         </div>
       </div>
 
@@ -195,7 +234,7 @@ const ViewCourse = () => {
           </button>
         </div>
       </Modal>
-    </div>
+    </>
   );
 };
 

@@ -1,5 +1,3 @@
-// inscripcion.js
-
 const express = require("express");
 const router = express.Router();
 const db = require("../Database/Db"); // Módulo de conexión a la base de datos
@@ -38,6 +36,35 @@ router.post("/inscripcion", verifyToken, async (req, res) => {
     // Manejo de errores: registrar el error en la consola y responder con un estado 500 y un mensaje JSON
     console.error("Error al inscribirse:", error);
     return res.status(500).json({ message: "Error al procesar la inscripción" });
+  }
+});
+
+// Ruta GET "/verificarInscripcion/:cursoId" para verificar la inscripción en un curso
+router.get("/verificarInscripcion/:cursoId", verifyToken, async (req, res) => {
+  const cursoId = req.params.cursoId;
+  const userId = req.userId;
+
+  try {
+    // Validar que cursoId esté presente y sea un número entero positivo
+    if (!cursoId || isNaN(cursoId) || cursoId <= 0) {
+      return res.status(400).json({ message: "ID de curso inválido" });
+    }
+
+    // Verificar si el usuario ya está inscrito en el curso
+    const [existingEnrollment] = await db.promise().query(
+      "SELECT * FROM curso_usuario WHERE Id_Usuario = ? AND Id_Curso = ?",
+      [userId, cursoId]
+    );
+
+    if (existingEnrollment.length > 0) {
+      return res.status(200).json({ inscrito: true });
+    } else {
+      return res.status(200).json({ inscrito: false });
+    }
+  } catch (error) {
+    // Manejo de errores: registrar el error en la consola y responder con un estado 500 y un mensaje JSON
+    console.error("Error al verificar la inscripción:", error);
+    return res.status(500).json({ message: "Error al verificar la inscripción" });
   }
 });
 

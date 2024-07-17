@@ -19,6 +19,7 @@ const InscripCoursecionRoute = require("./Conections/Controllers/CursosIns");
 const CursesContentRoute = require("./Conections/Controllers/CursesContent");
 const certicatesRoute = require("./Conections/Controllers/certificates");
 const dashboardRoute = require("./Conections/Controllers/dashboard");
+const EditCurseRoute = require ("./Conections/Controllers/Editcurse")
 const app = express(); // Crea una aplicación Express
 const port = 5000; // Puerto en el que se ejecutará el servidor
 
@@ -62,6 +63,7 @@ app.use("/api", InscripCoursecionRoute);
 app.use("/api", CursesContentRoute);
 app.use("/api", certicatesRoute);
 app.use("/api", dashboardRoute);
+app.use("/api", EditCurseRoute)
 // Inicia el servidor Express y lo hace escuchar en el puerto especificado
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);

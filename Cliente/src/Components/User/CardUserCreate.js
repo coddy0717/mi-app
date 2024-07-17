@@ -124,7 +124,7 @@ const Cursos = () => {
                   month: "2-digit",
                   day: "2-digit",
                 })}
-                autor={curso.Nombre_Usuario}
+                autor={curso.Nombre_Usuario.toUpperCase()}
                 imagenAutor={profilePicUrl}
                 carrera={curso.Nombre_Carrera}
                 facultad={curso.Nombre_Facultad}
